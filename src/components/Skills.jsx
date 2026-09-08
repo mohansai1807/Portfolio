@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import {
   Braces,
@@ -14,10 +14,16 @@ import {
   Terminal,
   Video,
   Wrench,
+  Sparkles,
 } from 'lucide-react'
 import { skillGroups } from '../data/skills'
 
-const categoryIcons = [Code2, Layout, Database, Wrench]
+const categoryIcons = {
+  Languages: Terminal,
+  Frontend: Layout,
+  'Backend & Databases': Server,
+  'Tools & Tech': Wrench,
+}
 
 const technologyIcons = {
   Python: Terminal,
@@ -39,122 +45,83 @@ const technologyIcons = {
   'REST APIs': Globe2,
   'Socket.IO': Network,
   WebRTC: Video,
- 
 }
-
-const ease = [0.16, 1, 0.3, 1]
 
 export default function Skills() {
   const shouldReduceMotion = useReducedMotion()
 
   return (
     <motion.section
-      className="relative overflow-hidden section-shell"
-      initial={shouldReduceMotion ? false : 'hidden'}
-      whileInView={shouldReduceMotion ? undefined : 'visible'}
-      viewport={{ once: true, margin: '-80px' }}
+      id="skills"
+      className="section-shell"
+      initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
     >
-      <motion.div
-        className="pointer-events-none absolute left-0 right-0 top-[8.5rem] hidden h-px origin-left bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent md:block"
-        variants={{ hidden: { scaleX: 0, opacity: 0 }, visible: { scaleX: 1, opacity: 1 } }}
-        transition={{ duration: 1.1, delay: 0.85, ease }}
-        aria-hidden="true"
-      />
-      <motion.div
-        className="pointer-events-none absolute inset-y-0 left-0 z-10 w-1/4 -translate-x-full bg-gradient-to-r from-transparent via-cyan-300/[0.06] to-transparent"
-        variants={{ hidden: { x: '-100%' }, visible: { x: '500%' } }}
-        transition={{ duration: 1.1, delay: 1.55, ease }}
-        aria-hidden="true"
-      />
-
-      <motion.div
-        variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
-        transition={{ duration: 0.45, ease }}
-      >
-        <div className="section-label">Capabilities</div>
-      </motion.div>
-      <motion.h2
-        className="section-title"
-        variants={{ hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0 } }}
-        transition={{ duration: 0.6, delay: 0.18, ease }}
-      >
-        Technical Skills
-      </motion.h2>
-      <motion.p
-        className="section-copy"
-        variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0 } }}
-        transition={{ duration: 0.55, delay: 0.38, ease }}
-      >
-        A comprehensive overview of my core technical stack, libraries, and developer tools.
-      </motion.p>
-
-      <motion.div
-        className="mt-8 grid gap-4 sm:grid-cols-2 sm:gap-5"
-        variants={{ visible: { transition: { delayChildren: 0.75, staggerChildren: 0.14 } } }}
-      >
-        {skillGroups.map((group, index) => (
-          <SkillCard
-            key={group.title}
-            group={group}
-            CategoryIcon={categoryIcons[index] || Code2}
-            shouldReduceMotion={shouldReduceMotion}
-          />
-        ))}
-      </motion.div>
-    </motion.section>
-  )
-}
-
-function SkillCard({ group, CategoryIcon, shouldReduceMotion }) {
-  const cardRef = useRef(null)
-
-  const handlePointerMove = (event) => {
-    if (shouldReduceMotion || !cardRef.current) return
-    const bounds = cardRef.current.getBoundingClientRect()
-    cardRef.current.style.setProperty('--spotlight-x', `${event.clientX - bounds.left}px`)
-    cardRef.current.style.setProperty('--spotlight-y', `${event.clientY - bounds.top}px`)
-  }
-
-  return (
-    <motion.article
-      ref={cardRef}
-      onPointerMove={handlePointerMove}
-      variants={{ hidden: { opacity: 0, y: 26, scale: 0.96 }, visible: { opacity: 1, y: 0, scale: 1 } }}
-      transition={{ duration: 0.65, ease }}
-      className="group relative overflow-hidden rounded-xl border border-white/10 bg-slate-900/50 p-5 shadow-sm transition-[border-color,box-shadow,transform] duration-300 hover:border-cyan-400/30 hover:shadow-[0_16px_40px_-28px_rgba(34,211,238,0.8)] sm:p-6"
-      style={{ '--spotlight-x': '50%', '--spotlight-y': '0%' }}
-    >
-      <div
-        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-        style={{ background: 'radial-gradient(220px circle at var(--spotlight-x) var(--spotlight-y), rgba(34, 211, 238, 0.08), transparent 70%)' }}
-        aria-hidden="true"
-      />
-      <div className="relative z-10 flex items-center gap-3">
-        <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-cyan-400/20 bg-cyan-400/10 text-cyan-300">
-          <CategoryIcon size={18} />
-        </span>
-        <h3 className="font-semibold text-slate-100">{group.title}</h3>
+      <div className="section-label">
+        <Sparkles size={13} />
+        <span>Technical Arsenal</span>
       </div>
+      <h2 className="section-title">Skills & Technologies</h2>
+      <p className="section-copy">
+        Production-tested programming languages, frontend systems, backend frameworks, and engineering tools.
+      </p>
 
-      <motion.div
-        className="relative z-10 mt-5 flex flex-wrap gap-2"
-        variants={{ visible: { transition: { delayChildren: 0.18, staggerChildren: 0.055 } } }}
-      >
-        {group.skills.map((skill) => {
-          const TechnologyIcon = technologyIcons[skill] || Code2
+      {/* Categories Grid */}
+      <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:gap-6">
+        {skillGroups.map((group, index) => {
+          const CategoryIcon = categoryIcons[group.title] || Code2
+
           return (
-            <motion.span
-              key={skill}
-              variants={{ hidden: { opacity: 0, scale: 0.9 }, visible: { opacity: 1, scale: 1 } }}
-              transition={{ duration: 0.3, ease }}
-              className="inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-white/[0.045] px-2.5 py-1.5 text-xs font-medium text-slate-300 transition-[border-color,background-color,color,transform,box-shadow] duration-[250ms] hover:-translate-y-0.5 hover:border-cyan-400/50 hover:bg-cyan-400/[0.08] hover:text-cyan-100 hover:shadow-[0_5px_14px_-10px_rgba(34,211,238,0.9)]"
+            <motion.div
+              key={group.title}
+              initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.45, delay: shouldReduceMotion ? 0 : index * 0.08 }}
+              className="interactive-panel group relative flex flex-col justify-between"
             >
-              <TechnologyIcon size={12} className="text-cyan-400/0 transition-colors duration-[250ms] group-hover:text-cyan-400" aria-hidden="true" />
-              {skill}
-            </motion.span>
+              <div>
+                {/* Header */}
+                <div className="flex items-center justify-between border-b border-slate-200/80 pb-3.5 dark:border-white/[0.08]">
+                  <div className="flex items-center gap-3">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-600 transition-colors group-hover:bg-cyan-500/15 dark:bg-cyan-400/10 dark:text-cyan-300">
+                      <CategoryIcon size={18} />
+                    </span>
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                      {group.title}
+                    </h3>
+                  </div>
+                  <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-semibold text-slate-600 dark:bg-white/[0.06] dark:text-slate-400">
+                    {group.skills.length} skills
+                  </span>
+                </div>
+
+                {/* Skill Tiles */}
+                <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-2">
+                  {group.skills.map((skill) => {
+                    const TechIcon = technologyIcons[skill] || Code2
+                    return (
+                      <div
+                        key={skill}
+                        className="group/item flex items-center gap-2.5 rounded-xl border border-slate-200/60 bg-white/60 p-2.5 shadow-none transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-500/40 hover:bg-white hover:shadow-sm dark:border-white/[0.06] dark:bg-white/[0.02] dark:hover:border-cyan-400/30 dark:hover:bg-white/[0.06] dark:hover:shadow-[0_4px_16px_-4px_rgba(56,189,248,0.2)]"
+                      >
+                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition-colors group-hover/item:bg-cyan-500/15 group-hover/item:text-cyan-600 dark:bg-white/[0.06] dark:text-slate-400 dark:group-hover/item:bg-cyan-400/20 dark:group-hover/item:text-cyan-300">
+                          <TechIcon size={13} />
+                        </span>
+                        <span className="text-xs font-semibold text-slate-800 transition-colors group-hover/item:text-slate-950 dark:text-slate-200 dark:group-hover/item:text-white truncate">
+                          {skill}
+                        </span>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            </motion.div>
           )
         })}
-      </motion.div>
-    </motion.article>
+      </div>
+    </motion.section>
   )
 }

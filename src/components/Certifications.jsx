@@ -1,5 +1,6 @@
 import React from 'react'
-import { Award, Code2, Terminal } from 'lucide-react'
+import { motion, useReducedMotion } from 'framer-motion'
+import { Award, Code2, Terminal, Sparkles, CheckCircle2, Calendar } from 'lucide-react'
 
 const certs = [
   {
@@ -8,7 +9,7 @@ const certs = [
     issuer: 'NxtWave',
     year: '2026',
     desc: 'Earned comprehensive certification in full-stack web development, RESTful APIs, Node.js, Express, and SQL database management.',
-    category: 'FULL STACK & SQL',
+    category: 'Full Stack & SQL',
     icon: Code2,
   },
   {
@@ -17,7 +18,7 @@ const certs = [
     issuer: '3Skill Company',
     year: '2026',
     desc: 'Completed hands-on software development internship focused on responsive web engineering, UI components, and real-world project delivery.',
-    category: 'WEB DEVELOPMENT',
+    category: 'Web Development',
     icon: Award,
   },
   {
@@ -26,72 +27,87 @@ const certs = [
     issuer: 'Vel Tech University',
     year: '2025',
     desc: 'Validated core proficiency in Python syntax, object-oriented programming, data structures, and algorithmic problem-solving.',
-    category: 'PYTHON & DSA',
+    category: 'Python & DSA',
     icon: Terminal,
   },
 ]
 
 export default function Certifications() {
+  const shouldReduceMotion = useReducedMotion()
+
   return (
-    <section className="section-shell">
-      <div className="section-label">Qualifications</div>
-      <h2 className="section-title">Certifications</h2>
+    <motion.section
+      id="certifications"
+      className="section-shell"
+      initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+    >
+      <div className="section-label">
+        <Sparkles size={13} />
+        <span>Credentials</span>
+      </div>
+      <h2 className="section-title">Certifications & Internships</h2>
       <p className="section-copy">
-        Formal technical credentials, software development internships, and programming certifications earned.
+        Formal technical credentials, industry internships, and certified software engineering proficiencies.
       </p>
 
-      {/* Timeline Wrapper */}
-      <div className="relative mt-10 ml-2 space-y-6 md:ml-4">
-        {/* Vertical Timeline Line */}
-        <div
-          className="absolute left-3 top-4 bottom-4 w-0.5 bg-slate-300 dark:bg-purple-900/50"
-          aria-hidden="true"
-        />
-
-        {certs.map((c) => {
+      {/* Cards Grid */}
+      <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {certs.map((c, index) => {
           const IconComponent = c.icon
 
           return (
-            <div key={c.id} className="relative pl-8 md:pl-10">
-              {/* Timeline Node Dot */}
-              <div
-                className="absolute -left-[1px] top-6 h-3.5 w-3.5 -translate-x-1/2 rounded-full border-2 border-slate-50 bg-purple-600 dark:border-[#050816] dark:bg-purple-500 shadow-sm"
-                aria-hidden="true"
-              />
-
-              {/* Card Container */}
-              <div className="group rounded-2xl border border-slate-200/80 bg-white/80 p-4 shadow-sm backdrop-blur-sm transition-all duration-300 hover:border-slate-300 dark:border-white/10 dark:bg-[#070b19] dark:hover:border-purple-500/30 sm:p-6">
-                <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-purple-100 text-purple-700 dark:bg-purple-950/60 dark:text-purple-400">
-                    <IconComponent size={22} />
-                  </div>
-
-                  <div className="min-w-0">
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-slate-50 break-words">
-                      {c.title}
-                    </h3>
-                    <div className="mt-1 text-xs font-medium text-slate-500 dark:text-slate-400">
-                      <span>{c.issuer}</span>
-                      <span className="mx-1.5">•</span>
-                      <span>{c.year}</span>
-                    </div>
-                    <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-                      {c.desc}
-                    </p>
-
-                    {/* Category Pill */}
-                    <div className="mt-4">
-                      <span className="inline-block rounded-md bg-purple-100 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-purple-800 dark:bg-purple-950/80 dark:text-purple-300">
-                        {c.category}
-                      </span>
-                    </div>
-                  </div>
+            <motion.article
+              key={c.id}
+              initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.45, delay: shouldReduceMotion ? 0 : index * 0.1 }}
+              className="interactive-panel flex flex-col justify-between p-5 sm:p-6"
+            >
+              <div>
+                {/* Header Icon + Category */}
+                <div className="flex items-center justify-between gap-2">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-600 dark:bg-cyan-400/10 dark:text-cyan-300">
+                    <IconComponent size={20} />
+                  </span>
+                  <span className="rounded-full border border-cyan-500/20 bg-cyan-500/5 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-cyan-700 dark:text-cyan-300">
+                    {c.category}
+                  </span>
                 </div>
+
+                {/* Title */}
+                <h3 className="mt-4 text-base font-bold text-slate-900 dark:text-white break-words">
+                  {c.title}
+                </h3>
+
+                {/* Issuer & Year */}
+                <div className="mt-2 flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                  <span>{c.issuer}</span>
+                  <span>•</span>
+                  <span className="inline-flex items-center gap-1">
+                    <Calendar size={12} />
+                    <span>{c.year}</span>
+                  </span>
+                </div>
+
+                {/* Description */}
+                <p className="mt-3 text-xs leading-relaxed text-slate-600 dark:text-slate-300">
+                  {c.desc}
+                </p>
               </div>
-            </div>
+
+              {/* Verified Status Tag */}
+              <div className="mt-5 flex items-center gap-1.5 border-t border-slate-200/80 pt-3 text-[11px] font-semibold text-emerald-600 dark:border-white/[0.08] dark:text-emerald-400">
+                <CheckCircle2 size={13} />
+                <span>Verified Credential</span>
+              </div>
+            </motion.article>
           )
         })}
       </div>
-    </section>
+    </motion.section>
   )
 }

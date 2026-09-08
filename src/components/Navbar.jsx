@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, ArrowUpRight } from 'lucide-react'
 
 const items = [
   { id: 'home', label: 'Home' },
@@ -77,20 +77,25 @@ export default function Navbar() {
         aria-current={isActive ? 'page' : undefined}
         className={`${
           mobile
-            ? 'block rounded-lg px-3 py-2.5 text-base font-medium transition-colors'
-            : 'relative py-2 text-sm font-medium transition-colors'
+            ? 'flex items-center justify-between rounded-xl px-3.5 py-3 text-base font-medium transition-colors'
+            : 'relative rounded-lg px-2.5 py-1.5 text-xs font-semibold tracking-wide transition-all duration-200'
         } ${
           isActive
-            ? 'text-slate-950 dark:text-white font-semibold'
+            ? mobile
+              ? 'bg-slate-100 font-bold text-slate-950 dark:bg-white/10 dark:text-white'
+              : 'text-slate-950 dark:text-white'
             : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200'
         }`}
       >
-        {item.label}
-        {!mobile && (
-          <span
-            className={`absolute inset-x-0 -bottom-0.5 h-0.5 rounded-full bg-slate-800 dark:bg-slate-200 transition-transform duration-300 ${
-              isActive ? 'scale-x-100' : 'scale-x-0'
-            }`}
+        <span>{item.label}</span>
+        {mobile && isActive && (
+          <span className="h-2 w-2 rounded-full bg-cyan-400" />
+        )}
+        {!mobile && isActive && (
+          <motion.span
+            layoutId="activeNavIndicator"
+            className="absolute inset-0 -z-10 rounded-lg bg-slate-200/70 dark:bg-white/[0.08]"
+            transition={{ type: 'spring', stiffness: 380, damping: 30 }}
           />
         )}
       </a>
@@ -99,35 +104,57 @@ export default function Navbar() {
 
   return (
     <motion.header
-      initial={shouldReduceMotion ? false : { opacity: 0, y: -12 }}
+      initial={shouldReduceMotion ? false : { opacity: 0, y: -16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.55, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
       className={`fixed top-0 z-40 w-full pt-[env(safe-area-inset-top)] transition-all duration-300 ${
         scrolled
-          ? 'border-b border-slate-200/80 bg-white/80 backdrop-blur-md dark:border-white/10 dark:bg-[#050816]/80 shadow-sm'
-          : 'bg-transparent'
+          ? 'border-b border-slate-200/80 bg-white/80 py-2 backdrop-blur-xl shadow-sm dark:border-white/[0.08] dark:bg-[#080c18]/85 dark:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.5)]'
+          : 'bg-transparent py-3 sm:py-4'
       }`}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4 md:px-8">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 sm:px-6 md:px-8">
+        {/* Brand Logo / Name */}
         <a
           href="#home"
           onClick={() => setOpen(false)}
-          className="min-w-0 truncate text-sm font-bold tracking-tight text-slate-900 dark:text-slate-50 transition-opacity hover:opacity-80 sm:text-base lg:text-lg"
+          className="group flex items-center gap-2 text-sm font-bold tracking-tight text-slate-900 transition-opacity hover:opacity-90 dark:text-slate-50 sm:text-base"
         >
-          <span className="hidden min-[420px]:inline">Kadirimangalam </span>Mohanasai
+          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-900 text-xs font-extrabold text-white shadow-sm dark:bg-white dark:text-slate-950">
+            M
+          </span>
+          <span className="font-semibold tracking-tight">
+            <span className="hidden min-[420px]:inline text-slate-500 dark:text-slate-400">Kadirimangalam </span>
+            Mohanasai
+          </span>
         </a>
 
-        <nav aria-label="Primary navigation" className="hidden items-center gap-4 lg:flex xl:gap-6">
+        {/* Desktop Navigation Links */}
+        <nav aria-label="Primary navigation" className="hidden items-center gap-1 rounded-full border border-slate-200/60 bg-white/60 px-3 py-1.5 backdrop-blur-md dark:border-white/[0.08] dark:bg-white/[0.03] lg:flex">
           {items.map((item) => navLink(item))}
-          <div className="h-4 w-px bg-slate-200 dark:bg-white/10 mx-1" />
-          <a href="#contact" className="button-primary min-h-0 text-xs px-3.5 py-2">
-            Let's Connect
-          </a>
         </nav>
 
-        <div className="flex shrink-0 items-center gap-1 sm:gap-2 lg:hidden">
+        {/* Right CTA Button */}
+        <div className="hidden items-center gap-3 lg:flex">
+          <a
+            href="#contact"
+            className="button-primary min-h-0 rounded-lg px-4 py-2 text-xs font-semibold"
+          >
+            <span>Let's Connect</span>
+            <ArrowUpRight size={13} />
+          </a>
+        </div>
+
+        {/* Mobile Menu Button */}
+        <div className="flex shrink-0 items-center gap-1.5 lg:hidden">
+          <a
+            href="#contact"
+            className="button-primary min-h-0 rounded-lg px-3 py-1.5 text-xs font-medium"
+          >
+            Connect
+          </a>
           <button
-            className="rounded-lg p-2.5 text-slate-700 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 dark:text-slate-200 dark:hover:bg-white/10"
+            className="rounded-xl border border-slate-200/80 bg-white/80 p-2 text-slate-700 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 dark:border-white/10 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10"
             onClick={() => setOpen((value) => !value)}
             aria-label={open ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={open}
@@ -137,22 +164,28 @@ export default function Navbar() {
         </div>
       </div>
 
+      {/* Mobile Drawer */}
       {open && (
-        <nav
+        <motion.nav
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.2 }}
           aria-label="Mobile navigation"
-          className="max-h-[calc(100dvh-4.5rem)] overflow-y-auto border-t border-slate-200/80 bg-white/95 px-4 py-4 backdrop-blur-lg dark:border-white/10 dark:bg-[#050816]/95 sm:px-6 lg:hidden"
+          className="max-h-[calc(100dvh-4.5rem)] overflow-y-auto border-b border-slate-200/80 bg-white/95 px-4 py-5 shadow-2xl backdrop-blur-2xl dark:border-white/10 dark:bg-[#080c18]/95 sm:px-6 lg:hidden"
         >
-          <div className="space-y-1">{items.map((item) => navLink(item, true))}</div>
-          <div className="mt-4 border-t border-slate-200/80 pt-3 dark:border-white/10">
+          <div className="space-y-1.5">{items.map((item) => navLink(item, true))}</div>
+          <div className="mt-5 border-t border-slate-200/80 pt-4 dark:border-white/10">
             <a
               href="#contact"
               onClick={() => setOpen(false)}
-              className="button-primary w-full text-center py-2.5"
+              className="button-primary w-full text-center py-3"
             >
-              Let's Connect
+              <span>Let's Connect</span>
+              <ArrowUpRight size={16} />
             </a>
           </div>
-        </nav>
+        </motion.nav>
       )}
     </motion.header>
   )

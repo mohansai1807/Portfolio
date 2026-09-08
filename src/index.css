@@ -2,19 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body, #root { height: 100%; }
+html, body, #root {
+  min-height: 100%;
+}
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 5.5rem;
   overflow-x: clip;
 }
+
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: clip;
   max-width: 100%;
+  font-family: 'Plus Jakarta Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
+}
+
+/* Elegant custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.4);
 }
 
 img, video {
@@ -23,19 +47,59 @@ img, video {
 }
 
 @layer components {
-  .section-shell { @apply py-12 sm:py-16 md:py-24; }
-  .section-label { @apply text-[11px] sm:text-xs font-semibold uppercase tracking-[0.16em] sm:tracking-[0.2em] text-slate-500 dark:text-slate-400; }
-  .section-title { @apply mt-2 text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-3xl md:text-4xl break-words; }
-  .section-copy { @apply mt-3 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300 sm:text-base sm:leading-7; }
+  .section-shell {
+    @apply py-14 sm:py-20 md:py-28 relative;
+  }
 
-  .panel { @apply rounded-xl border border-slate-200/80 bg-white/70 p-4 shadow-sm backdrop-blur-sm sm:p-6 dark:border-white/10 dark:bg-slate-900/40 dark:shadow-none; }
-  .interactive-panel { @apply panel transition-all duration-300 hover:border-slate-300 hover:bg-white dark:hover:border-white/20 dark:hover:bg-slate-900/60; }
+  .section-label {
+    @apply inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-semibold uppercase tracking-[0.18em] text-cyan-700 dark:text-cyan-400/90;
+  }
 
-  .button-primary { @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 touch-manipulation dark:bg-slate-100 dark:text-slate-950 dark:hover:bg-white dark:focus-visible:ring-slate-300 dark:focus-visible:ring-offset-slate-950; }
-  .button-secondary { @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white/70 px-5 py-2.5 text-sm font-semibold text-slate-800 transition-colors hover:border-slate-400 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 touch-manipulation dark:border-white/15 dark:bg-slate-900/30 dark:text-slate-100 dark:hover:border-white/25 dark:hover:bg-slate-800/50 dark:focus-visible:ring-offset-slate-950; }
+  .section-title {
+    @apply mt-2.5 text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-3xl md:text-4xl lg:text-[2.65rem] break-words;
+  }
 
-  .field { @apply w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:ring-2 focus:ring-slate-400/20 dark:border-white/10 dark:bg-slate-950/60 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-white/20 dark:focus:ring-white/10; }
-  .badge { @apply inline-flex max-w-full items-center break-words rounded-md border border-slate-200 bg-slate-100/80 px-2.5 py-1 text-xs font-medium text-slate-700 dark:border-white/10 dark:bg-white/5 dark:text-slate-300; }
+  .section-copy {
+    @apply mt-3 max-w-2xl text-sm leading-relaxed text-slate-600 dark:text-slate-400 sm:text-base sm:leading-7;
+  }
+
+  .panel {
+    @apply rounded-2xl border border-slate-200/80 bg-white/80 p-5 shadow-sm backdrop-blur-md transition-all duration-300 sm:p-6 md:p-7 dark:border-white/[0.08] dark:bg-[#0d1424]/75 dark:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.5)];
+  }
+
+  .interactive-panel {
+    @apply panel transition-all duration-300 hover:border-slate-300 hover:shadow-md dark:hover:border-white/[0.18] dark:hover:bg-[#111a30]/85 dark:hover:shadow-[0_16px_40px_-20px_rgba(0,0,0,0.8)];
+  }
+
+  .button-primary {
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-slate-800 hover:shadow-md active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 touch-manipulation dark:bg-slate-100 dark:text-slate-950 dark:hover:bg-white dark:hover:shadow-[0_0_20px_rgba(255,255,255,0.25)] dark:focus-visible:ring-cyan-400 dark:focus-visible:ring-offset-slate-950;
+  }
+
+  .button-secondary {
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl border border-slate-300/80 bg-white/80 px-5 py-2.5 text-sm font-semibold text-slate-800 shadow-sm transition-all duration-200 hover:border-slate-400 hover:bg-slate-50 hover:text-slate-950 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 touch-manipulation dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-200 dark:hover:border-white/20 dark:hover:bg-white/[0.08] dark:hover:text-white dark:focus-visible:ring-offset-slate-950;
+  }
+
+  .field {
+    @apply w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition-all duration-200 placeholder:text-slate-400 hover:border-slate-400 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/15 dark:border-white/10 dark:bg-[#090e1a]/80 dark:text-slate-100 dark:placeholder:text-slate-500 dark:hover:border-white/20 dark:focus:border-cyan-400/60 dark:focus:ring-cyan-400/15;
+  }
+
+  .badge {
+    @apply inline-flex max-w-full items-center break-words rounded-md border border-slate-200/80 bg-slate-100/90 px-2.5 py-1 text-xs font-medium text-slate-700 transition-colors dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-slate-300;
+  }
+}
+
+/* Ambient Background Grid Pattern */
+.bg-grid-pattern {
+  background-size: 36px 36px;
+  background-image: 
+    linear-gradient(to right, rgba(148, 163, 184, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
+}
+
+.dark .bg-grid-pattern {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
 }
 
 @media (prefers-reduced-motion: reduce) {
